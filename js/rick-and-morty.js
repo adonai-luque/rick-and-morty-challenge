@@ -107,10 +107,22 @@ export class RickAndMorty {
     return query;
   }
 
+  formatEpisode(episode) {
+    const locations = episode.characters.map((character => character.origin.name))
+    const uniqLocations = [...new Set(locations)];
+    const formattedEpisode = {
+      name: episode.name,
+      episode: episode.episode,
+      locations: uniqLocations
+    }
+    return formattedEpisode
+  }
+  
   async getEpisodesCharactersOrigins(counts) {
     const response = await this.apiResponse(this.episodesCharactersOriginsQuery(counts));
     const json = await response.json();
-    let episodesCharactersOrigins = json.data.episodesByIds
+    const episodesByIds = json.data.episodesByIds;
+    const episodesCharactersOrigins = episodesByIds.map(episode => this.formatEpisode(episode))
     return episodesCharactersOrigins;
   }
 }

@@ -1,8 +1,6 @@
 export class RickAndMorty {
   constructor() {
-    this.locations = {}
-    this.episodes = []
-    this.characters = []
+    this.resources = {}
   }
 
   async getCounts() {
@@ -46,12 +44,22 @@ export class RickAndMorty {
     return counts
   }
 
-  async getLocations(count) {
-    let ids = "[" + Array.from({length: count}, (x, i) => i + 1).map(id => id.toString()).join(',') + "]"
+  async getResources(counts) {
+    const locationsIds = "[" + Array.from({length: counts.locations}, (x, i) => i + 1).map(id => id.toString()).join(',') + "]"
+    const episodesIds = "[" + Array.from({length: counts.episodes}, (x, i) => i + 1).map(id => id.toString()).join(',') + "]"
+    const charactersIds = "[" + Array.from({length: counts.characters}, (x, i) => i + 1).map(id => id.toString()).join(',') + "]"
 
-    const locationsQuery = JSON.stringify({
+    const resourcesQuery = JSON.stringify({
       query: `{
-        locationsByIds(ids: ${ids}) {
+        locationsByIds(ids: ${locationsIds}) {
+          id
+          name
+        }
+        episodesByIds(ids: ${episodesIds}) {
+          id
+          name
+        }
+        charactersByIds(ids: ${charactersIds}) {
           id
           name
         }
@@ -62,7 +70,7 @@ export class RickAndMorty {
       'https://rickandmortyapi.com/graphql',
       {
         method: 'post',
-        body: locationsQuery,
+        body: resourcesQuery,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -70,7 +78,12 @@ export class RickAndMorty {
     );
 
     const json = await locationsResponse.json()
-    let locationObjects = json.data.locationsByIds.map(location => ({ [location.id]: location.name }))
-    return locationObjects
+    let resources = {
+      locations: json.data.locationsByIds,
+      episodes: json.data.episodesByIds,
+      characters: json.data.charactersByIds
+    }
+    // json.data.locationsByIds.map(location => ({ [location.id]: location.name }))
+    return resources
   }
 }

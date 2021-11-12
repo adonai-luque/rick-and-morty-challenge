@@ -6,7 +6,7 @@ let start = performance.now()
 const challenge = new RickAndMorty();
 let counts = await challenge.getCounts();
 console.log(counts)
-// challenge.locations = await challenge.getLocations(locationsCount)
-// console.log(challenge.locations)
+let resources = await challenge.getResources(counts)
+console.log(resources)
 let finish = performance.now()
 console.log(finish - start)

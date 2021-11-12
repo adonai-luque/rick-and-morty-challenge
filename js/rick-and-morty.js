@@ -15,7 +15,7 @@ export class RickAndMorty {
   }
 
   resourcesCountsQuery() {
-    return JSON.stringify({
+    const query = JSON.stringify({
       query: `{
         locations {
           info {
@@ -34,6 +34,7 @@ export class RickAndMorty {
         }
       }`,
     });
+    return query;
   }
 
   async getCounts() {
@@ -47,20 +48,25 @@ export class RickAndMorty {
     return counts;
   }
 
+  resourceIds(resourceCount) {
+    const idsToString = Array.from({ length: resourceCount }, (_, i) => i + 1).map((id) => id.toString()).join(",")
+    return idsToString
+  }
+
   resourcesNamesQuery(counts) {
-    const locationsIds = Array.from({ length: counts.locations }, (_, i) => i + 1).map((id) => id.toString()).join(",")
-    const episodesIds = Array.from({ length: counts.episodes }, (_, i) => i + 1).map((id) => id.toString()).join(",")
-    const charactersIds = Array.from({ length: counts.characters }, (_, i) => i + 1).map((id) => id.toString()).join(",")
+    // const locationsIds = Array.from({ length: counts.locations }, (_, i) => i + 1).map((id) => id.toString()).join(",")
+    // const episodesIds = Array.from({ length: counts.episodes }, (_, i) => i + 1).map((id) => id.toString()).join(",")
+    // const charactersIds = Array.from({ length: counts.characters }, (_, i) => i + 1).map((id) => id.toString()).join(",")
     
     const query = JSON.stringify({
       query: `{
-        locationsByIds(ids: [${locationsIds}]) {
+        locationsByIds(ids: [${this.resourceIds(counts.locations)}]) {
           name
         }
-        episodesByIds(ids: [${episodesIds}]) {
+        episodesByIds(ids: [${this.resourceIds(counts.episodes)}]) {
           name
         }
-        charactersByIds(ids: [${charactersIds}]) {
+        charactersByIds(ids: [${this.resourceIds(counts.characters)}]) {
           name
         }
       }`,
@@ -86,5 +92,29 @@ export class RickAndMorty {
       return acum + letterCount;
     }, 0);
     return count;
+  }
+
+  episodesCharactersOriginsQuery(counts) {
+    const query = JSON.stringify({
+      query: `{
+        episodesByIds(ids: [${this.resourceIds(counts.episodes)}]) {
+          name
+          episode
+          characters {
+            origin {
+              name
+            }
+          }
+        }
+      }`,
+    });
+    return query;
+  }
+
+  async getEpisodesCharactersOrigins(counts) {
+    const response = await this.apiResponse(this.episodesCharactersOriginsQuery(counts));
+    const json = await response.json();
+    let episodesCharactersOrigins = json.data.episodesByIds
+    return episodesCharactersOrigins;
   }
 }

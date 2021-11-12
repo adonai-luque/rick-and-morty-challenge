@@ -1,5 +1,7 @@
 import { RickAndMorty } from "./js/rick-and-morty.js";
 
+//  First question: Char Counter
+
 let start = performance.now()
 const challenge = new RickAndMorty()
 const counts = await challenge.getCounts()
@@ -33,3 +35,5 @@ const charCounterAnswer = {
   ]
 }
 console.log(charCounterAnswer)
+
+//  Second question: Episode Locations

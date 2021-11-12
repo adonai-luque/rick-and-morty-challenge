@@ -1,10 +1,21 @@
 export class RickAndMorty {
   constructor() {
-    this.resources = {}
+    this.resources = {};
   }
 
-  async getCounts() {
-    const countsQuery = JSON.stringify({
+  async apiResponse(query) {
+    const response = await fetch("https://rickandmortyapi.com/graphql", {
+      method: "post",
+      body: query,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  }
+
+  resourcesCountsQuery() {
+    return JSON.stringify({
       query: `{
         locations {
           info {
@@ -21,77 +32,59 @@ export class RickAndMorty {
             count
           }
         }
-      }`
+      }`,
     });
-        
-    const countResponse = await fetch(
-      'https://rickandmortyapi.com/graphql',
-      {
-        method: 'post',
-        body: countsQuery,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-  
-    const json = await countResponse.json()
+  }
+
+  async getCounts() {
+    const response = await this.apiResponse(this.resourcesCountsQuery());
+    const json = await response.json();
     const counts = {
       locations: json.data.locations.info.count,
       episodes: json.data.episodes.info.count,
-      characters: json.data.characters.info.count
-    }
-    return counts
+      characters: json.data.characters.info.count,
+    };
+    return counts;
   }
 
-  async getResources(counts) {
-    const locationsIds = "[" + Array.from({length: counts.locations}, (x, i) => i + 1).map(id => id.toString()).join(',') + "]"
-    const episodesIds = "[" + Array.from({length: counts.episodes}, (x, i) => i + 1).map(id => id.toString()).join(',') + "]"
-    const charactersIds = "[" + Array.from({length: counts.characters}, (x, i) => i + 1).map(id => id.toString()).join(',') + "]"
-
-    const resourcesQuery = JSON.stringify({
+  resourcesNamesQuery(counts) {
+    const locationsIds = Array.from({ length: counts.locations }, (_, i) => i + 1).map((id) => id.toString()).join(",")
+    const episodesIds = Array.from({ length: counts.episodes }, (_, i) => i + 1).map((id) => id.toString()).join(",")
+    const charactersIds = Array.from({ length: counts.characters }, (_, i) => i + 1).map((id) => id.toString()).join(",")
+    
+    const query = JSON.stringify({
       query: `{
-        locationsByIds(ids: ${locationsIds}) {
-          id
+        locationsByIds(ids: [${locationsIds}]) {
           name
         }
-        episodesByIds(ids: ${episodesIds}) {
-          id
+        episodesByIds(ids: [${episodesIds}]) {
           name
         }
-        charactersByIds(ids: ${charactersIds}) {
-          id
+        charactersByIds(ids: [${charactersIds}]) {
           name
         }
-      }`
+      }`,
     });
-
-    const locationsResponse = await fetch(
-      'https://rickandmortyapi.com/graphql',
-      {
-        method: 'post',
-        body: resourcesQuery,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    const json = await locationsResponse.json()
-    let resources = {
+    return query
+  }
+  
+  async getResourcesNames(counts) {
+    const response = await this.apiResponse(this.resourcesNamesQuery(counts));
+    const json = await response.json();
+    let resourcesNames = {
       locations: json.data.locationsByIds,
       episodes: json.data.episodesByIds,
-      characters: json.data.charactersByIds
-    }
-    // json.data.locationsByIds.map(location => ({ [location.id]: location.name }))
-    return resources
+      characters: json.data.charactersByIds,
+    };
+    return resourcesNames;
   }
 
   letterCountInResource(resourceArray, letter) {
-    const pattern = new RegExp(letter, 'gi')
-    return resourceArray.reduce((acum, resource) => {
-      const letterCount = (resource.name.match(pattern) || []).length
-      return acum + letterCount
-    }, 0)
+    const pattern = new RegExp(letter, "gi");
+    const count = resourceArray.reduce((acum, resource) => {
+      const letterCount = (resource.name.match(pattern) || []).length;
+      return acum + letterCount;
+    }, 0);
+    return count;
   }
 }

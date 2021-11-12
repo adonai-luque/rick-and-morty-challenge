@@ -89,7 +89,6 @@ export class RickAndMorty {
 
   letterCountInResource(resourceArray, letter) {
     const pattern = new RegExp(letter, 'gi')
-    console.log(pattern)
     return resourceArray.reduce((acum, resource) => {
       const letterCount = (resource.name.match(pattern) || []).length
       return acum + letterCount

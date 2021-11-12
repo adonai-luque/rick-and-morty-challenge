@@ -5,10 +5,20 @@ export class RickAndMorty {
     this.characters = []
   }
 
-  async getLocationsCount() {
-    const countQuery = JSON.stringify({
+  async getCounts() {
+    const countsQuery = JSON.stringify({
       query: `{
         locations {
+          info {
+            count
+          }
+        }
+        episodes {
+          info {
+            count
+          }
+        }
+        characters {
           info {
             count
           }
@@ -20,7 +30,7 @@ export class RickAndMorty {
       'https://rickandmortyapi.com/graphql',
       {
         method: 'post',
-        body: countQuery,
+        body: countsQuery,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -28,7 +38,12 @@ export class RickAndMorty {
     );
   
     const json = await countResponse.json()
-    return json.data.locations.info.count
+    const counts = {
+      locations: json.data.locations.info.count,
+      episodes: json.data.episodes.info.count,
+      characters: json.data.characters.info.count
+    }
+    return counts
   }
 
   async getLocations(count) {

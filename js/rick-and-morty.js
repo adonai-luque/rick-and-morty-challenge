@@ -86,4 +86,13 @@ export class RickAndMorty {
     // json.data.locationsByIds.map(location => ({ [location.id]: location.name }))
     return resources
   }
+
+  letterCountInResource(resourceArray, letter) {
+    const pattern = new RegExp(letter, 'gi')
+    console.log(pattern)
+    return resourceArray.reduce((acum, resource) => {
+      const letterCount = (resource.name.match(pattern) || []).length
+      return acum + letterCount
+    }, 0)
+  }
 }

@@ -54,10 +54,6 @@ export class RickAndMorty {
   }
 
   resourcesNamesQuery(counts) {
-    // const locationsIds = Array.from({ length: counts.locations }, (_, i) => i + 1).map((id) => id.toString()).join(",")
-    // const episodesIds = Array.from({ length: counts.episodes }, (_, i) => i + 1).map((id) => id.toString()).join(",")
-    // const charactersIds = Array.from({ length: counts.characters }, (_, i) => i + 1).map((id) => id.toString()).join(",")
-    
     const query = JSON.stringify({
       query: `{
         locationsByIds(ids: [${this.resourceIds(counts.locations)}]) {

@@ -37,3 +37,16 @@ const charCounterAnswer = {
 console.log(charCounterAnswer)
 
 //  Second question: Episode Locations
+
+start = performance.now()
+
+finish = performance.now()
+time = finish - start
+formattedTime = `${Math.floor(time / 1000)}s ${time % 1000}ms`
+const episodeLocationsAnswer = {
+  "exercise_name": "Episode locations",
+  "time": formattedTime,
+  "in_time": (time < 3000),
+  "results": []
+}
+console.log(episodeLocationsAnswer)

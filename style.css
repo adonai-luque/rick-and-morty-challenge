@@ -52,8 +52,9 @@ body {
 }
 
 .content p {
-  margin: 2px;
+  margin: 2px 12px;
   font-size: 18px;
+  text-align: center;
 }
 
 .content pre {

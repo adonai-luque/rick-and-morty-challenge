@@ -40,7 +40,6 @@ const charCounterAnswer = {
       }
   ]
 }
-console.log(charCounterAnswer)
 
 //  Second question: Episode Locations
 
@@ -62,4 +61,13 @@ const episodeLocationsAnswer = {
   "in_time": (secondTime < 3000),
   "results": episodes
 }
-console.log(episodeLocationsAnswer)
+
+// We compose the full answer to the challenge
+const challengeAnswer = [
+  charCounterAnswer,
+  episodeLocationsAnswer
+]
+
+// Then insert that result on the page for presentation
+let answer = document.getElementById("answer")
+answer.textContent = "Solución:\n\n" + JSON.stringify(challengeAnswer, undefined, 2)

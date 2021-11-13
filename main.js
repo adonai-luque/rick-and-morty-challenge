@@ -2,20 +2,20 @@ import { RickAndMorty } from "./js/rick-and-morty.js";
 
 //  First question: Char Counter
 
-let start = performance.now()
+const firstStart = performance.now()
 const challenge = new RickAndMorty()
 const counts = await challenge.getCounts()
 const resources = await challenge.getResourcesNames(counts)
 const lsInLocations = challenge.letterCountInResource(resources.locations, 'l')
 const esInEpisodes = challenge.letterCountInResource(resources.episodes, 'e')
 const csInCharacters = challenge.letterCountInResource(resources.characters, 'c')
-let finish = performance.now()
-let time = finish - start
-let formattedTime = `${Math.floor(time / 1000)}s ${time % 1000}ms`
+const firstFinish = performance.now()
+const firstTime = firstFinish - firstStart
+const firstFormattedTime = `${Math.floor(firstTime / 1000)}s ${firstTime % 1000}ms`
 const charCounterAnswer = {
   "exercise_name": "Char counter",
-  "time": formattedTime,
-  "in_time": (time < 3000),
+  "time": firstFormattedTime,
+  "in_time": (firstTime < 3000),
   "results": [
       {
           "char": "l",
@@ -38,15 +38,15 @@ console.log(charCounterAnswer)
 
 //  Second question: Episode Locations
 
-start = performance.now()
-const episodes = await challenge.getEpisodesCharactersOrigins(counts)
-finish = performance.now()
-time = finish - start
-formattedTime = `${Math.floor(time / 1000)}s ${time % 1000}ms`
+const secondStart = performance.now()
+const episodes = await challenge.getEpisodesCharactersOrigins(counts.episodes)
+const secondFinish = performance.now()
+const secondTime = secondFinish - secondStart
+const secondFormattedTime = `${Math.floor(secondTime / 1000)}s ${secondTime % 1000}ms`
 const episodeLocationsAnswer = {
   "exercise_name": "Episode locations",
-  "time": formattedTime,
-  "in_time": (time < 3000),
+  "time": secondFormattedTime,
+  "in_time": (secondTime < 3000),
   "results": episodes
 }
 console.log(episodeLocationsAnswer)

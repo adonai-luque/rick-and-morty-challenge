@@ -90,10 +90,10 @@ export class RickAndMorty {
     return count;
   }
 
-  episodesCharactersOriginsQuery(counts) {
+  episodesCharactersOriginsQuery(episodesCount) {
     const query = JSON.stringify({
       query: `{
-        episodesByIds(ids: [${this.resourceIds(counts.episodes)}]) {
+        episodesByIds(ids: [${this.resourceIds(episodesCount)}]) {
           name
           episode
           characters {

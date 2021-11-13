@@ -1,14 +1,13 @@
-import { RickAndMorty } from "./js/rick-and-morty.js";
+import * as RickAndMorty from "./js/rick-and-morty.js";
 
 //  First question: Char Counter
 
 const firstStart = performance.now()
-const challenge = new RickAndMorty()
-const counts = await challenge.getCounts()
-const resources = await challenge.getResourcesNames(counts)
-const lsInLocations = challenge.letterCountInResource(resources.locations, 'l')
-const esInEpisodes = challenge.letterCountInResource(resources.episodes, 'e')
-const csInCharacters = challenge.letterCountInResource(resources.characters, 'c')
+const counts = await RickAndMorty.getCounts()
+const resources = await RickAndMorty.getResourcesNames(counts)
+const lsInLocations = RickAndMorty.letterCountInResource(resources.locations, 'l')
+const esInEpisodes = RickAndMorty.letterCountInResource(resources.episodes, 'e')
+const csInCharacters = RickAndMorty.letterCountInResource(resources.characters, 'c')
 const firstFinish = performance.now()
 const firstTime = firstFinish - firstStart
 const firstFormattedTime = `${Math.floor(firstTime / 1000)}s ${firstTime % 1000}ms`
@@ -39,7 +38,7 @@ console.log(charCounterAnswer)
 //  Second question: Episode Locations
 
 const secondStart = performance.now()
-const episodes = await challenge.getEpisodesCharactersOrigins(counts.episodes)
+const episodes = await RickAndMorty.getEpisodesCharactersOrigins(counts.episodes)
 const secondFinish = performance.now()
 const secondTime = secondFinish - secondStart
 const secondFormattedTime = `${Math.floor(secondTime / 1000)}s ${secondTime % 1000}ms`

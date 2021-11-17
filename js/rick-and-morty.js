@@ -1,4 +1,4 @@
-export async function apiResponse(query) {
+async function apiResponse(query) {
   const response = await fetch("https://rickandmortyapi.com/graphql", {
     method: "post",
     body: query,
@@ -9,7 +9,7 @@ export async function apiResponse(query) {
   return response;
 }
 
-export function resourcesCountsQuery() {
+function resourcesCountsQuery() {
   const query = JSON.stringify({
     query: `{
       locations {
@@ -33,7 +33,7 @@ export function resourcesCountsQuery() {
 }
 
 export async function getCounts() {
-  const response = await this.apiResponse(this.resourcesCountsQuery());
+  const response = await apiResponse(resourcesCountsQuery());
   const json = await response.json();
   const counts = {
     locations: json.data.locations.info.count,
@@ -43,21 +43,21 @@ export async function getCounts() {
   return counts;
 }
 
-export function resourceIds(resourceCount) {
+function resourceIds(resourceCount) {
   const idsToString = Array.from({ length: resourceCount }, (_, i) => i + 1).map((id) => id.toString()).join(",")
   return idsToString
 }
 
-export function resourcesNamesQuery(counts) {
+function resourcesNamesQuery(counts) {
   const query = JSON.stringify({
     query: `{
-      locationsByIds(ids: [${this.resourceIds(counts.locations)}]) {
+      locationsByIds(ids: [${resourceIds(counts.locations)}]) {
         name
       }
-      episodesByIds(ids: [${this.resourceIds(counts.episodes)}]) {
+      episodesByIds(ids: [${resourceIds(counts.episodes)}]) {
         name
       }
-      charactersByIds(ids: [${this.resourceIds(counts.characters)}]) {
+      charactersByIds(ids: [${resourceIds(counts.characters)}]) {
         name
       }
     }`,
@@ -66,7 +66,7 @@ export function resourcesNamesQuery(counts) {
 }
 
 export async function getResourcesNames(counts) {
-  const response = await this.apiResponse(this.resourcesNamesQuery(counts));
+  const response = await apiResponse(resourcesNamesQuery(counts));
   const json = await response.json();
   let resourcesNames = {
     locations: json.data.locationsByIds,
@@ -85,10 +85,10 @@ export function letterCountInResource(resourceArray, letter) {
   return count;
 }
 
-export function episodesCharactersOriginsQuery(episodesCount) {
+function episodesCharactersOriginsQuery(episodesCount) {
   const query = JSON.stringify({
     query: `{
-      episodesByIds(ids: [${this.resourceIds(episodesCount)}]) {
+      episodesByIds(ids: [${resourceIds(episodesCount)}]) {
         name
         episode
         characters {
@@ -102,7 +102,7 @@ export function episodesCharactersOriginsQuery(episodesCount) {
   return query;
 }
 
-export function formatEpisode(episode) {
+function formatEpisode(episode) {
   const locations = episode.characters.map((character => character.origin.name))
   const uniqLocations = [...new Set(locations)];
   const formattedEpisode = {
@@ -114,9 +114,9 @@ export function formatEpisode(episode) {
 }
 
 export async function getEpisodesCharactersOrigins(counts) {
-  const response = await this.apiResponse(this.episodesCharactersOriginsQuery(counts));
+  const response = await apiResponse(episodesCharactersOriginsQuery(counts));
   const json = await response.json();
   const episodesByIds = json.data.episodesByIds;
-  const episodesCharactersOrigins = episodesByIds.map(episode => this.formatEpisode(episode))
+  const episodesCharactersOrigins = episodesByIds.map(episode => formatEpisode(episode))
   return episodesCharactersOrigins;
   }

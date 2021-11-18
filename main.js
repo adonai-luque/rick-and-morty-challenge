@@ -1,5 +1,3 @@
-import { getCounts, getResourcesNames, letterCountInResource, getEpisodesCharactersOrigins } from "./js/rick-and-morty.js";
-
 // We create an empty challenge answer
 const challengeAnswer = []
 let counts

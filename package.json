@@ -1,0 +1,22 @@
+{
+  "name": "rick-and-morty-challenge",
+  "version": "1.0.0",
+  "description": "This is my solution for the [Rick and Morty Challenge](https://wikichipax.notion.site/Rick-and-Morty-Challenge-84a1b794dc09429fb3178c2a24e7c217)   There is a live version at [adonai-luque.github.io/rick-and-morty-challenge-js/](https://adonai-luque.github.io/rick-and-morty-challenge-js/)",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adonai-luque/rick-and-morty-challenge-js.git"
+  },
+  "author": "Adonai Luque",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adonai-luque/rick-and-morty-challenge-js/issues"
+  },
+  "homepage": "https://github.com/adonai-luque/rick-and-morty-challenge-js#readme",
+  "devDependencies": {
+    "jest": "^27.3.1"
+  }
+}

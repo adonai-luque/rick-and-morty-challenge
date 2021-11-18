@@ -51,7 +51,7 @@ test('resourcesNamesQuery returns a custom GraphQL query with ids generated from
   expect(RickAndMorty.resourcesNamesQuery(counts)).toEqual(query);
 })
 
-test('letterCountInResource countscase insensitive ocurrences of letter in resources names', () => {
+test('letterCountInResource counts case insensitive ocurrences of a letter in resources names', () => {
   //This resource array contains 6 case insensitive ocurrences of the letter 'a'
   const resourceArray = [
     { name: 'Aaaxx' },

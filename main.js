@@ -73,10 +73,9 @@ async function secondQuestion() {
   challengeAnswer.push(episodeLocationsAnswer)
 }
 
-
+// We return the promises of both questions and then insert the full answer into the page for presentation 
 firstQuestion().then(() => {
   secondQuestion().then(() => {
-    // We insert that result on the page for presentation
     let answer = document.getElementById("answer")
     answer.textContent = "Solución:\n\n" + JSON.stringify(challengeAnswer, undefined, 2)    
   })

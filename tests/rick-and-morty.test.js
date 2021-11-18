@@ -2,29 +2,6 @@ const { test, expect } = require('@jest/globals');
 const expectExport = require('expect');
 const RickAndMorty = require('../js/rick-and-morty');
 
-test('resourcesCountsQuery returns a GraphQL query', () => {
-  const query = JSON.stringify({
-    query: `{
-      locations {
-        info {
-          count
-        }
-      }
-      episodes {
-        info {
-          count
-        }
-      }
-      characters {
-        info {
-          count
-        }
-      }
-    }`,
-  });
-  expect(RickAndMorty.resourcesCountsQuery()).toEqual(query);
-})
-
 test('resourceIds(n) returns a comma separated succesion of numbers from 1 to n', () => {
   expect(RickAndMorty.resourceIds(3)).toEqual('1,2,3')
 })
@@ -51,7 +28,7 @@ test('resourcesNamesQuery returns a custom GraphQL query with ids generated from
   expect(RickAndMorty.resourcesNamesQuery(counts)).toEqual(query);
 })
 
-test('letterCountInResource countscase insensitive ocurrences of letter in resources names', () => {
+test('letterCountInResource counts case insensitive ocurrences of a letter in resources names', () => {
   //This resource array contains 6 case insensitive ocurrences of the letter 'a'
   const resourceArray = [
     { name: 'Aaaxx' },

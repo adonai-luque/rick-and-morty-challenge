@@ -27,7 +27,7 @@ function resourcesCountsQuery() {
           count
         }
       }
-    }`,
+    }`
   });
   return query;
 }
@@ -60,7 +60,7 @@ function resourcesNamesQuery(counts) {
       charactersByIds(ids: [${resourceIds(counts.characters)}]) {
         name
       }
-    }`,
+    }`
   });
   return query
 }
@@ -97,7 +97,7 @@ function episodesCharactersOriginsQuery(episodesCount) {
           }
         }
       }
-    }`,
+    }`
   });
   return query;
 }
@@ -121,7 +121,7 @@ async function getEpisodesCharactersOrigins(counts) {
   return episodesCharactersOrigins;
 }
 
-let module = {}
+if (typeof module == 'undefined') { var module = {} }
 
 module.exports = {
   apiResponse,

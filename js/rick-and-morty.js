@@ -10,33 +10,30 @@ async function apiResponse(query) {
   return response;
 }
 
-// This function returns a GraphQL query that only queries the API for the counts of each resource
-function resourcesCountsQuery() {
-  const query = JSON.stringify({
-    query: `{
-      locations {
-        info {
-          count
-        }
+// This constant stores a GraphQL query that only queries the API for the counts of each resource
+const resourcesCountsQuery = JSON.stringify({
+  query: `{
+    locations {
+      info {
+        count
       }
-      episodes {
-        info {
-          count
-        }
+    }
+    episodes {
+      info {
+        count
       }
-      characters {
-        info {
-          count
-        }
+    }
+    characters {
+      info {
+        count
       }
-    }`
-  });
-  return query;
-}
+    }
+  }`
+});
 
 // This function returns the counts of each resource in the API
 async function getCounts() {
-  const response = await apiResponse(resourcesCountsQuery());
+  const response = await apiResponse(resourcesCountsQuery);
   const json = await response.json();
   const counts = {
     locations: json.data.locations.info.count,

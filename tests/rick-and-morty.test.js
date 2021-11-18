@@ -2,29 +2,6 @@ const { test, expect } = require('@jest/globals');
 const expectExport = require('expect');
 const RickAndMorty = require('../js/rick-and-morty');
 
-test('resourcesCountsQuery returns a GraphQL query', () => {
-  const query = JSON.stringify({
-    query: `{
-      locations {
-        info {
-          count
-        }
-      }
-      episodes {
-        info {
-          count
-        }
-      }
-      characters {
-        info {
-          count
-        }
-      }
-    }`,
-  });
-  expect(RickAndMorty.resourcesCountsQuery()).toEqual(query);
-})
-
 test('resourceIds(n) returns a comma separated succesion of numbers from 1 to n', () => {
   expect(RickAndMorty.resourceIds(3)).toEqual('1,2,3')
 })

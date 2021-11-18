@@ -27,12 +27,12 @@ function resourcesCountsQuery() {
           count
         }
       }
-    }`,
+    }`
   });
   return query;
 }
 
-export async function getCounts() {
+async function getCounts() {
   const response = await apiResponse(resourcesCountsQuery());
   const json = await response.json();
   const counts = {
@@ -60,12 +60,12 @@ function resourcesNamesQuery(counts) {
       charactersByIds(ids: [${resourceIds(counts.characters)}]) {
         name
       }
-    }`,
+    }`
   });
   return query
 }
 
-export async function getResourcesNames(counts) {
+async function getResourcesNames(counts) {
   const response = await apiResponse(resourcesNamesQuery(counts));
   const json = await response.json();
   let resourcesNames = {
@@ -76,7 +76,7 @@ export async function getResourcesNames(counts) {
   return resourcesNames;
 }
 
-export function letterCountInResource(resourceArray, letter) {
+function letterCountInResource(resourceArray, letter) {
   const pattern = new RegExp(letter, "gi");
   const count = resourceArray.reduce((acum, resource) => {
     const letterCount = (resource.name.match(pattern) || []).length;
@@ -97,7 +97,7 @@ function episodesCharactersOriginsQuery(episodesCount) {
           }
         }
       }
-    }`,
+    }`
   });
   return query;
 }
@@ -113,10 +113,25 @@ function formatEpisode(episode) {
   return formattedEpisode
 }
 
-export async function getEpisodesCharactersOrigins(counts) {
+async function getEpisodesCharactersOrigins(counts) {
   const response = await apiResponse(episodesCharactersOriginsQuery(counts));
   const json = await response.json();
   const episodesByIds = json.data.episodesByIds;
   const episodesCharactersOrigins = episodesByIds.map(episode => formatEpisode(episode))
   return episodesCharactersOrigins;
-  }
+}
+
+if (typeof module == 'undefined') { var module = {} }
+
+module.exports = {
+  apiResponse,
+  resourcesCountsQuery,
+  getCounts,
+  resourceIds,
+  resourcesNamesQuery,
+  getResourcesNames,
+  letterCountInResource,
+  episodesCharactersOriginsQuery,
+  formatEpisode,
+  getEpisodesCharactersOrigins
+}

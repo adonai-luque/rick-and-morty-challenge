@@ -10,45 +10,6 @@ async function apiResponse(query) {
   return response;
 }
 
-// This constant stores a GraphQL query that only queries the API for the counts of each resource
-const resourcesCountsQuery = JSON.stringify({
-  query: `{
-    locations {
-      info {
-        count
-      }
-    }
-    episodes {
-      info {
-        count
-      }
-    }
-    characters {
-      info {
-        count
-      }
-    }
-  }`
-});
-
-// This function returns the counts of each resource in the API
-async function getCounts() {
-  const response = await apiResponse(resourcesCountsQuery);
-  const json = await response.json();
-  const counts = {
-    locations: json.data.locations.info.count,
-    episodes: json.data.episodes.info.count,
-    characters: json.data.characters.info.count,
-  };
-  return counts;
-}
-
-// This function returns a comma separated succesion of numbers from 1 to the resourceCount
-function resourceIds(resourceCount) {
-  const idsToString = Array.from({ length: resourceCount }, (_, i) => i + 1).map((id) => id.toString()).join(",")
-  return idsToString
-}
-
 // This function returns a custom GraphQL query with ids generated from the argument containing the counts of the resources
 function resourcesNamesQuery(resourceInPlural, page) {
   const query = JSON.stringify({
@@ -70,18 +31,12 @@ function resourcesNamesQuery(resourceInPlural, page) {
 async function getResourcesNames(resourceInPlural) {
   let page = 1
   let resourcesNames = []
-  do {
+  while (page !== null) {
     const response = await apiResponse(resourcesNamesQuery(resourceInPlural, page));
     const json = await response.json();
     resourcesNames = [...resourcesNames, ...json.data[resourceInPlural].results]
     page = json.data[resourceInPlural].info.next
-  } while (page !== null)
-  // let resourcesNames = {
-  //   locations: json.data.locationsByIds,
-  //   episodes: json.data.episodesByIds,
-  //   characters: json.data.charactersByIds,
-  // };
-  console.log(resourcesNames)
+  }
   return resourcesNames;
 }
 
@@ -96,18 +51,23 @@ function letterCountInResource(resourceArray, letter) {
 }
 
 // This function returns a custom GraphQL query with ids generated from the argument containing the counts of the resources
-function episodesCharactersOriginsQuery(episodesCount) {
+function episodesCharactersOriginsQuery(page) {
   const query = JSON.stringify({
     query: `{
-      episodesByIds(ids: [${resourceIds(episodesCount)}]) {
-        name
-        episode
-        characters {
-          origin {
-            name
-          }
+      episodes(page: ${page}) {
+        info {
+          next
         }
-      }
+        results {
+          name
+          episode
+          characters {
+            origin {
+              name
+            }
+        }
+        }
+      }      
     }`
   });
   return query;
@@ -126,23 +86,28 @@ function formatEpisode(episode) {
 }
 
 // This function returns all the episodes with name, episode code and a list of unique locations of origin for its characters
-async function getEpisodesCharactersOrigins(counts) {
-  const response = await apiResponse(episodesCharactersOriginsQuery(counts));
-  const json = await response.json();
-  const episodesByIds = json.data.episodesByIds;
-  const episodesCharactersOrigins = episodesByIds.map(episode => formatEpisode(episode))
+async function getEpisodesCharactersOrigins() {
+  let page = 1
+  let episodes = []
+  while (page !== null) {
+    const response = await apiResponse(episodesCharactersOriginsQuery(page));
+    const json = await response.json();
+    episodes = [...episodes, ...json.data.episodes.results]
+    page = json.data.episodes.info.next
+  }
+  const episodesCharactersOrigins = episodes.map(episode => formatEpisode(episode))
   return episodesCharactersOrigins;
 }
 
-// This is a workaround for the error: "Uncaught ReferenceError: module is not defined" that appears in the browser
-if (typeof module == 'undefined') { var module = {} }
+//  // This is a workaround for the error: "Uncaught ReferenceError: module is not defined" that appears in the browser
+// if (typeof module == 'undefined') { var module = {} }
 
-// We export the all functions to be tested by JEST
-module.exports = {
-  resourcesCountsQuery,
-  resourceIds,
-  resourcesNamesQuery,
-  letterCountInResource,
-  episodesCharactersOriginsQuery,
-  formatEpisode,
-}
+//  // We export the all functions to be tested by JEST
+// module.exports = {
+//   resourcesCountsQuery,
+//   resourceIds,
+//   resourcesNamesQuery,
+//   letterCountInResource,
+//   episodesCharactersOriginsQuery,
+//   formatEpisode,
+// }

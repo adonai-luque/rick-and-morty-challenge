@@ -50,32 +50,38 @@ function resourceIds(resourceCount) {
 }
 
 // This function returns a custom GraphQL query with ids generated from the argument containing the counts of the resources
-function resourcesNamesQuery(counts) {
+function resourcesNamesQuery(resourceInPlural, page) {
   const query = JSON.stringify({
     query: `{
-      locationsByIds(ids: [${resourceIds(counts.locations)}]) {
-        name
-      }
-      episodesByIds(ids: [${resourceIds(counts.episodes)}]) {
-        name
-      }
-      charactersByIds(ids: [${resourceIds(counts.characters)}]) {
-        name
-      }
+      ${resourceInPlural}(page: ${page}) {
+        info {
+          next
+        }
+        results {
+          name
+        }
+      }      
     }`
   });
   return query
 }
 
 // This function returns all the names of the resources in the API
-async function getResourcesNames(counts) {
-  const response = await apiResponse(resourcesNamesQuery(counts));
-  const json = await response.json();
-  let resourcesNames = {
-    locations: json.data.locationsByIds,
-    episodes: json.data.episodesByIds,
-    characters: json.data.charactersByIds,
-  };
+async function getResourcesNames(resourceInPlural) {
+  let page = 1
+  let resourcesNames = []
+  do {
+    const response = await apiResponse(resourcesNamesQuery(resourceInPlural, page));
+    const json = await response.json();
+    resourcesNames = [...resourcesNames, ...json.data[resourceInPlural].results]
+    page = json.data[resourceInPlural].info.next
+  } while (page !== null)
+  // let resourcesNames = {
+  //   locations: json.data.locationsByIds,
+  //   episodes: json.data.episodesByIds,
+  //   characters: json.data.charactersByIds,
+  // };
+  console.log(resourcesNames)
   return resourcesNames;
 }
 
